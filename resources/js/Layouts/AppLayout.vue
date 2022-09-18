@@ -1,5 +1,5 @@
 <script setup>
-import { ref } from 'vue';
+import {onMounted, ref} from 'vue';
 import { Inertia } from '@inertiajs/inertia';
 import { Head, Link } from '@inertiajs/inertia-vue3';
 import ApplicationMark from '@/Components/ApplicationMark.vue';
@@ -11,6 +11,7 @@ import ResponsiveNavLink from '@/Components/ResponsiveNavLink.vue';
 
 defineProps({
     title: String,
+    administration: Array,
 });
 
 const showingNavigationDropdown = ref(false);
@@ -26,6 +27,14 @@ const switchToTeam = (team) => {
 const logout = () => {
     Inertia.post(route('logout'));
 };
+
+const truncate = (value, length) => {
+    if (value.length > length) {
+        return value.substring(0, length) + "...";
+    } else {
+        return value;
+    }
+}
 </script>
 
 <template>
@@ -37,11 +46,12 @@ const logout = () => {
        <div class="grid grid-cols-6">
            <div class="col-span-1 min-h-screen lg:inline-block hidden bg-gradient-to-b text-center text-white from-blue-900 to-cyan-700 relative">
                <img class="inline-block w-24 mt-6 mb-24" src="/img/himit-fest-logo.png">
-               <h1 class="my-font text-6xl">HIMIT</h1>
+               <h1 class="my-font text-6xl">{{ administration[0] ? administration[0].category === 'student' ? 'UiUx' : 'Web' : 'HIMIT' }}</h1>
                <h5 class="my-font text-2xl">COMPETITION</h5>
                <div class="mt-16 text-center px-8">
                    <span class="font-bold text-xl block">Dashboard</span>
-                   <span class="text-lg mt-6">Sidescript Indonesia Tim</span>
+                   <span class="text-lg mt-6">{{ truncate(administration[0] ? administration[0].name : '', 25) }} Tim</span>
+                   <span class="text-sm mt-1 block">{{ truncate(administration[0] ? administration[0].instance : '', 50) }}</span>
                </div>
                <div class="absolute w-full bottom-0 left-0 text-center">
                    <img src="/img/kerang-dashboard.png" class="w-3/4 inline-block mb-4" alt="kerang-dashboard">

@@ -6,6 +6,7 @@ use App\Actions\Administration\AdministrationAction;
 use App\Http\Controllers\Controller;
 use App\Models\Administration;
 use App\Models\Elimination;
+use App\Models\Participant;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -64,25 +65,42 @@ class AdministrationController extends Controller
         return redirect()->back()->with('data', $administration_data);
     }
 
-    public function destroy(Administration $administration): \Illuminate\Http\RedirectResponse
+    public function destroy(int $id): \Illuminate\Http\RedirectResponse
     {
+        $participants = Participant::query()->where('administration_id', $id)->delete();
+        $elimination = Elimination::query()->where('administration_id', $id)->delete();
+        $administration = Administration::query()->find($id);
         $administration->delete();
         return redirect()->back();
     }
 
-    public function dashboard(): \Inertia\Response
+    public function dashboard(Request $request): \Inertia\Response
     {
         $administration = Administration::query()->whereHas('user', function ($query) {
             $query->where('id', Auth::id());
         })->with('participant', 'elimination')->first();
-        $elimination = Elimination::query()->where('administration_id', $administration->id)->first();
         $hash = $administration ? $administration->hash : '';
-        $elimination_hash = $elimination ? $elimination->hash : '';
+
+        $administrations = Administration::query()
+            ->when($request->get('name'), function ($query) use($request) {
+                $query->where('name', 'LIKE', '%'.$request->get('name').'%');
+            })
+            ->when($request->get('category'), function ($query) use($request) {
+                $query->where('category', $request->get('category'));
+            })
+            ->with('participant', 'elimination')
+            ->orderBy('created_at', $request->get('sort') ? $request->get('sort') : 'desc')
+            ->paginate(10);
+
+        if($administration) {
+            $elimination = Elimination::query()->where('administration_id', $administration->id)->first();
+            $elimination_hash = $elimination ? $elimination->hash : '';
+        }
         return Inertia::render('Dashboard', [
             'administration' => [$administration, $hash],
-            'elimination' => [$elimination, $elimination_hash],
+            'administrations' => $administrations,
+            'elimination' => $administration ? [$elimination, $elimination_hash] : [],
         ]);
-
     }
 
     public function addPayment(Request $request, Administration $administration): \Illuminate\Http\RedirectResponse
@@ -107,6 +125,23 @@ class AdministrationController extends Controller
         }
         return redirect()->back();
     }
+
+    public function setConfirmation(Request $request, int $id): \Illuminate\Http\RedirectResponse
+    {
+        $data = Administration::query()->find($id);
+        $data->is_confirmed = $request->is_confirmed;
+        $data->save();
+        return redirect()->back();
+    }
+
+    public function setPaymentConfirmation(Request $request, int $id): \Illuminate\Http\RedirectResponse
+    {
+        $data = Administration::query()->find($id);
+        $data->payment_confirmation = $request->payment_confirmation;
+        $data->save();
+        return redirect()->back();
+    }
+
 
     protected function component(string $name): string
     {

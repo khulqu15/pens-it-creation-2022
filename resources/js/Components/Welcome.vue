@@ -1,12 +1,17 @@
 <template>
     <div>
-        <div class="p-6 sm:px-20 bg-white border-b border-gray-200">
+        <div class="p-6 sm:px-6 bg-white border-b border-gray-200">
             <div>
-                <ApplicationLogo class="block h-12 w-auto" />
+                <ApplicationLogo :administration="administration" class="block h-12 w-auto" />
             </div>
 
             <div class="mt-12 text-gray-500">
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum elementum tempus nibh sed imperdiet. Vivamus tristique sapien egestas lacus molestie, ac sollicitudin est rhoncus. Nullam volutpat aliquam lorem sit amet facilisis. Aliquam in aliquam tellus, ac consectetur sapien. Etiam magna eros, malesuada non auctor sed, lobortis tincidunt ipsum.
+                <span v-if="administration[0] && administration[0].category === 'colleger'">
+                    Web Design Competition adalah perlombaan yang diperuntukan bagi mahasiswa/I aktif program sarjana maupun diploma di perguruan tinggi swasta atau negeri di seluruh Indonesia dengan menguji kreativitasnya dalam mendesain web. Keberadaan lomba ini diharapkan dapat menjadi wadah bagi mahasiswa/I dalam menuangkan ide-ide
+                </span>
+                <span v-else>
+                    Kompetisi User Interface (UI)/User Experience (UX) Design adalah kompetisi desain antarmuka sistem/produk yang berorientasi kepada kenyamanan dan kemudahan pengguna (user) dalam menggunakan sistem/produk tersebut.
+                </span>
             </div>
         </div>
 
@@ -19,7 +24,7 @@
                             <div class="ml-4 text-lg text-gray-600 leading-7 font-semibold">
                                 <a href="#">Administrasi
                                     <div v-if="administration[0] !== null" class="badge gap-2" :class="{'badge-error': administration[0].is_confirmed === 0, 'badge-success': administration[0].is_confirmed}">
-                                        {{ administration[0].is_confirmed === 0 ? 'Menunggu Konfirmasi' : 'Sudah Dikonfirmasi' }}
+                                        {{ administration[0] && administration[0].is_confirmed === 0 ? 'Menunggu Konfirmasi' : 'Sudah Dikonfirmasi' }}
                                     </div>
                                     <div v-else class="badge gap-2 badge-ghost">
                                         Belum diisi
@@ -31,7 +36,8 @@
                     </div>
                     <div>
                         <a v-if="administration[0] === null" :href="route('administration.create')" class="btn bg-yellow-500 border-0 hover:bg-yellow-700 text-black pt-1 px-6 mt-3">Lengkapi</a>
-                        <a v-else :href="route('administration.edit', administration[1])" class="btn bg-green-500 border-0 hover:bg-green-700 text-black pt-1 px-6 mt-3">
+                        <a v-else :href="administration[0].is_confirmed === 1 ? '#' : route('administration.edit', administration[1])" class="btn bg-green-500 border-0 hover:bg-green-700 text-black pt-1 px-6 mt-3"
+                            :class="{'btn-disabled opacity-50': administration[0].is_confirmed === 1}">
                             {{ administration[0].participant.length < 2 ? 'Lengkapi' : 'Edit' }}
                         </a>
                     </div>
@@ -45,8 +51,8 @@
                             <Icon icon="akar-icons:double-sword" class="text-3xl"/>
                             <div class="ml-4 text-lg text-gray-600 leading-7 space-x-1 font-semibold">
                                 <a href="#">Penyisihan
-                                    <div v-if="administration[0].elimination !== null" class="badge gap-2" :class="{'badge-error': administration[0].elimination.is_eliminated === 0, 'badge-success': administration[0].elimination.is_eliminated === 1}">
-                                        {{ administration[0].elimination.is_eliminated === 0 ? 'Belum Tereliminasi' : 'Sudah Tereliminasi' }}
+                                    <div v-if="administration[0] && administration[0].elimination !== null" class="badge gap-2" :class="{'badge-error': administration[0].elimination.is_eliminated === 0, 'badge-success': administration[0].elimination.is_eliminated === 1}">
+                                        {{ administration[0].elimination.is_eliminated === 0 ? 'Belum Tereliminasi' : 'Lolos Penyisihan' }}
                                     </div>
                                     <div v-else class="badge gap-2 badge-ghost">
                                         Belum diisi
@@ -56,10 +62,10 @@
                         </div>
                         <p class="mt-3 ml-12">Babak penyisihan untuk menentukan kamu masuk babak final</p>
                     </div>
-                    <div>
-                        <label for="elimination-modal" id="elimination-modal-label" v-if="administration[0].is_confirmed === 1"
+                    <div v-if="administration[0] && administration[0].is_confirmed">
+                        <label :for="administration[0].elimination === null || administration[0].elimination.is_eliminated !== 1 ? 'elimination-modal' : ''" id="elimination-modal-label" v-if="administration[0]"
                             class="btn border-0 text-black pt-1 px-6 mt-3"
-                            :class="{'bg-yellow-500 hover:bg-yellow-700': administration[0].elimination === null, 'bg-green-500 hover:bg-green-700': administration[0].elimination !== null}">
+                            :class="{'bg-yellow-500 hover:bg-yellow-700': administration[0].elimination === null, 'bg-green-500 hover:bg-green-700': administration[0].elimination !== null, 'btn-disabled opacity-50': administration[0].elimination && administration[0].elimination.is_eliminated === 1}">
                             {{ administration[0].elimination === null ? 'Lengkapi' : 'Edit' }}
                         </label>
                         <input type="checkbox" id="elimination-modal" class="modal-toggle" />
@@ -91,7 +97,7 @@
                 </div>
             </div>
 
-            <div class="p-6 border-b">
+            <div class="p-6">
                 <div class="flex justify-between items-center">
                     <div class="mt-2 text-sm text-gray-500">
                         <div class="flex items-center">
@@ -109,9 +115,9 @@
                         </div>
                         <p class="mt-3 ml-12">Lakukan pembayaran sesuai jenis lomba dan upload bukti pembayaran pada akunmu</p>
                     </div>
-                    <div v-if="administration[0].elimination !== null">
-                        <label v-if="administration[0].elimination.is_eliminated === 1" id="payment-modal-label" for="payment-modal" class="btn bg-yellow-500 border-0 hover:bg-yellow-700 text-black pt-1 px-6 mt-3"
-                            :class="{'bg-yellow-500 hover:bg-yellow-700': administration[0].payment === null, 'bg-green-500 hover:bg-green-700': administration[0].payment}">
+                    <div v-if="administration[0] && administration[0].elimination !== null">
+                        <label v-if="administration[0].elimination.is_eliminated === 1" id="payment-modal-label" :for="administration[0].payment_confirmation === 0 ? 'payment-modal' : ''" class="btn bg-yellow-500 border-0 hover:bg-yellow-700 text-black pt-1 px-6 mt-3"
+                            :class="{'bg-yellow-500 hover:bg-yellow-700': administration[0].payment === null, 'bg-green-500 hover:bg-green-700': administration[0].payment, 'btn-disabled opacity-50': administration[0] && administration[0].payment_confirmation === 1}">
                             {{ administration[0].payment === null ? 'Lengkapi' : 'Edit' }}
                         </label>
                         <input type="checkbox" id="payment-modal" class="modal-toggle" />

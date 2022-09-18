@@ -26,4 +26,14 @@ class EliminationController extends Controller
         ]);
         return redirect()->back();
     }
+
+    public function setEliminated(Request $request, int $id): \Illuminate\Http\RedirectResponse
+    {
+        $data = Elimination::query()->find($id);
+//        var_dump($request->is_eliminated);
+//        exit;
+        $data->is_eliminated = $request->is_eliminated;
+        $data->save();
+        return redirect()->back();
+    }
 }

@@ -9,14 +9,14 @@
                     <div v-else>
                         <div class="grid p-6 grid-cols-2 gap-4 border-b">
                             <div>
-                                <a :href="route('dashboard')" class="btn w-full border btn-info">Team</a>
+                                <a :href="route('dashboard')" class="btn w-full border btn-ghost">Team</a>
                             </div>
                             <div>
-                                <a :href="route('dashboard.user')" class="btn w-full border btn-ghost">User</a>
+                                <a :href="route('dashboard.user')" class="btn w-full border btn-info">User</a>
                             </div>
                         </div>
                         <div class="bg-gray-50 p-6">
-                            <team-table :administrations="administrations"/>
+                            <user-table :users="users"/>
                         </div>
                     </div>
                 </div>
@@ -28,14 +28,14 @@
 <script>
 import AppLayout from '@/Layouts/AppLayout.vue';
 import Welcome from '@/Components/Welcome.vue';
-import TeamTable from "@/Components/TeamTable.vue";
+import UserTable from "@/Components/UserTable.vue";
 
 export default {
-    props: ['administration', 'elimination', 'administrations', 'users'],
+    props: ['administration', 'elimination', 'users'],
     components: {
         AppLayout,
         Welcome,
-        TeamTable,
+        UserTable,
     },
     data() {
         return {
