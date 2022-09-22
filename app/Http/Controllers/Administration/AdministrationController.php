@@ -29,6 +29,7 @@ class AdministrationController extends Controller
         $create = Administration::query()->create([
             'name' => $request->name,
             'instance' => $request->instance,
+            'competitions' => $request->competitions,
             'category' => $request->category,
             'user_id' => $request->user_id,
         ]);
@@ -59,6 +60,7 @@ class AdministrationController extends Controller
             'name' => $request->name,
             'instance' => $request->instance,
             'category' => $request->category,
+            'competitions' => $request->competitions,
             'user_id' => $request->user_id,
         ]);
         $administration_data = Administration::query()->find($administration->id);
@@ -87,6 +89,9 @@ class AdministrationController extends Controller
             })
             ->when($request->get('category'), function ($query) use($request) {
                 $query->where('category', $request->get('category'));
+            })
+            ->when($request->get('competition'), function ($query) use($request) {
+                $query->where('competitions', $request->get('competition'));
             })
             ->with('participant', 'elimination')
             ->orderBy('created_at', $request->get('sort') ? $request->get('sort') : 'desc')

@@ -58,5 +58,8 @@ const verificationLinkSent = computed(() => props.status === 'verification-link-
                 </div>
             </div>
         </form>
+        <div class="">
+            <img src="/img/kerang.png" class="absolute -right-10 -bottom-20" alt="">
+        </div>
     </AuthenticationCard>
 </template>

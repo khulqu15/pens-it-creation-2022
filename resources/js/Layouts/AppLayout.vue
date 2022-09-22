@@ -46,7 +46,7 @@ const truncate = (value, length) => {
        <div class="grid grid-cols-6">
            <div class="col-span-1 min-h-screen lg:inline-block hidden bg-gradient-to-b text-center text-white from-blue-900 to-cyan-700 relative">
                <img class="inline-block w-24 mt-6 mb-24" src="/img/himit-fest-logo.png">
-               <h1 class="my-font text-6xl">{{ administration[0] ? administration[0].category === 'student' ? 'UiUx' : 'Web' : 'HIMIT' }}</h1>
+               <h1 class="my-font text-3xl">IT CREATION</h1>
                <h5 class="my-font text-2xl">COMPETITION</h5>
                <div class="mt-16 text-center px-8">
                    <span class="font-bold text-xl block">Dashboard</span>

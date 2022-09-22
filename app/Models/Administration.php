@@ -17,6 +17,7 @@ class Administration extends Model
         'name',
         'instance',
         'category',
+        'competitions',
         'user_id',
     ];
 

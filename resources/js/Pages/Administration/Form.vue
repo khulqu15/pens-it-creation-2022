@@ -22,12 +22,20 @@
                             </div>
                             <div class="form-control w-full">
                                 <label class="label">
-                                    <span class="label-text font-bold text-cyan-700 text-lg">Asal Instansi</span>
+                                    <span class="label-text font-bold text-cyan-700 text-lg">Kategori Instansi</span>
                                 </label>
-                                <select required v-model="form.administration.category" class="input hover:border-cyan-500 w-full">
-                                    <option value="">Pilih Kategori Instansi</option>
+                                <select @change="onChangeCategory()" required v-model="form.administration.category" class="input hover:border-cyan-500 w-full">
+                                    <option :value="null">Pilih Kategori Instansi</option>
                                     <option value="colleger">Kampus (Mahasiswa)</option>
                                     <option value="student">Sekolah (Siswa)</option>
+                                </select>
+                            </div>
+                            <div v-if="form.administration.category" class="form-control w-full">
+                                <label class="label">
+                                    <span class="label-text font-bold text-cyan-700 text-lg">Kategori Lomba</span>
+                                </label>
+                                <select required v-model="form.administration.competitions" class="input hover:border-cyan-500 w-full">
+                                    <option v-for="(item, index) in competitions" :key="index" :value="item.value">{{ item.label }}</option>
                                 </select>
                             </div>
                             <div class="text-right space-x-3">
@@ -107,12 +115,14 @@ export default {
     data() {
         return {
             loader: false,
+            competitions: [],
             form: {
                 mode: 'Administrasi',
                 administration: reactive({
                     name: '',
                     instance: '',
-                    category: '',
+                    category: null,
+                    competitions: '',
                     user_id: this.$page.props.user.id,
                 }),
                 participants: []
@@ -120,12 +130,28 @@ export default {
         }
     },
     mounted() {
-        console.log(this.data)
         if(this.data) {
             this.form.administration.name = this.data[0].id
             this.form.administration.name = this.data[0].name
             this.form.administration.instance = this.data[0].instance
             this.form.administration.category = this.data[0].category
+            if(this.form.administration.category === 'student') {
+                this.competitions = [{
+                    label: 'UiUx Competition',
+                    value: 'uiux',
+                }]
+            } else if(this.form.administration.category === 'colleger') {
+                this.competitions = [{
+                    label: 'Idea Bussiness',
+                    value: 'bussiness',
+                }, {
+                    label: 'Web Competitions',
+                    value: 'web',
+                }]
+            }
+            setTimeout(() => {
+                this.form.administration.competitions = this.data[0].competitions
+            }, 250)
             if(this.data[0].participant.length > 0) {
                 this.data[0].participant.map((participant, index) => {
                     let item = reactive({
@@ -136,7 +162,6 @@ export default {
                         preview: '/img/identity/'+participant.identity,
                     })
                     this.form.participants.push(item)
-                    console.log(item)
                 })
 
             }
@@ -150,13 +175,31 @@ export default {
         Icon,
     },
     methods: {
+        onChangeCategory() {
+            this.form.administration.competitions = ''
+            if(this.form.administration.category === 'student') {
+                this.competitions = [{
+                    label: 'UiUx Competition',
+                    value: 'uiux',
+                }]
+                this.form.administration.competitions = 'uiux'
+            } else if(this.form.administration.category === 'colleger') {
+                this.competitions = [{
+                    label: 'Idea Bussiness',
+                    value: 'bussiness',
+                }, {
+                    label: 'Web Competitions',
+                    value: 'web',
+                }]
+                this.form.administration.competitions = 'bussiness'
+            }
+        },
         onSubmitAdministration() {
             let url = this.mode === 'create' ? this.route('administration.store') : this.route('administration.update', this.data[1])
             if(this.mode === 'detail') {
                 this.form.mode = 'Peserta'
             } else {
                 this.loader = true
-                console.log(url)
                 this.$inertia.post(url, this.form.administration, {
                     onFinish: visit => {
                         this.loader = false
@@ -174,7 +217,7 @@ export default {
             if(this.form.participants.length < 3) {
                 let participant = reactive({
                     id: null,
-                    name: '',
+                    name: null,
                     role: this.form.participants.length === 0 ? 'leader' : 'member',
                     identity: null,
                     preview: null,
@@ -201,21 +244,26 @@ export default {
             if(this.form.participants.length > 0) {
                 this.loader = true
                 for(let i = 0; i < this.form.participants.length; i++) {
-                    let url = this.form.participants[i].id === null ? this.route('participant.store') : this.route('participant.update', this.form.participants[i].id)
-                    let formdata = new FormData()
-                    formdata.append('name', this.form.participants[i].name)
-                    formdata.append('role', this.form.participants[i].role)
-                    formdata.append('identity', this.form.participants[i].identity)
-                    formdata.append('administration_id', this.data[0].id)
-                    console.log(this.form.participants[i])
-                    if(this.form.participants[i].id !== null)
-                        formdata.append('_method', 'PATCH')
-                    axios.post(url, formdata).then((response) => {
-                        this.loader = false
+                    if(this.form.participants[i].name && this.form.participants[i].identity) {
+                        let url = this.form.participants[i].id === null ? this.route('participant.store') : this.route('participant.update', this.form.participants[i].id)
+                        let formdata = new FormData()
+                        formdata.append('name', this.form.participants[i].name)
+                        formdata.append('role', this.form.participants[i].role)
+                        formdata.append('identity', this.form.participants[i].identity)
+                        formdata.append('administration_id', this.data[0].id)
+                        if(this.form.participants[i].id !== null)
+                            formdata.append('_method', 'PATCH')
+                        axios.post(url, formdata).then((response) => {
+                            this.loader = false
+                            if((i + 1) === this.form.participants.length) {
+                                window.location.href = '/dashboard'
+                            }
+                        })
+                    } else {
                         if((i + 1) === this.form.participants.length) {
                             window.location.href = '/dashboard'
                         }
-                    })
+                    }
                 }
             }
         }

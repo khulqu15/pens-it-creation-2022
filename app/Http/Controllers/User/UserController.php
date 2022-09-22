@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\User;
 
+use App\Actions\Fortify\CreateNewUser;
 use App\Http\Controllers\Controller;
 use App\Models\Administration;
 use App\Models\Elimination;
@@ -51,4 +52,9 @@ class UserController extends Controller
         User::query()->find($id)->delete();
         return redirect()->back();
     }
+
+//    public function register(Request $request) {
+//        (new \App\Actions\Fortify\CreateNewUser)->create((array)$request);
+//        $request->user()->sendEma
+//    }
 }

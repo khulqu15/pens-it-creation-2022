@@ -83,6 +83,11 @@ const submit = () => {
                     Log in
                 </PrimaryButton>
             </div>
+            <div class="text-center mt-3">
+                <Link :href="route('register')" class="underline text-sm text-gray-600 hover:text-gray-900">
+                    Dont have an account ? Register
+                </Link>
+            </div>
         </form>
         <div class="">
             <img src="/img/kerang.png" class="absolute -right-10 -bottom-20" alt="">

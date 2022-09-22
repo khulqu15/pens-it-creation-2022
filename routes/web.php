@@ -30,6 +30,8 @@ Route::middleware([
     config('jetstream.auth_session'),
     'verified',
 ])->group(function () {
+//    Route::post('/register', [\App\Http\Controllers\User\UserController::class, 'register'])->name('register.post');
+
     Route::get('/dashboard', [\App\Http\Controllers\Administration\AdministrationController::class, 'dashboard'])->name('dashboard');
     Route::get('/dashboard/user', [\App\Http\Controllers\User\UserController::class, 'index'])->name('dashboard.user');
     Route::get('/administration', [\App\Http\Controllers\Administration\AdministrationController::class, 'create'])->name('administration.create');
