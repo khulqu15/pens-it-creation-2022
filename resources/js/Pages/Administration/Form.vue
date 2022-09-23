@@ -83,7 +83,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <button v-if="form.participants.length < 3" type="button" @click="addParticipant()" class="btn text-neutral hover:text-white w-full text-center bg-white">
+                            <button v-if="form.participants.length < max_count" type="button" @click="addParticipant()" class="btn text-neutral hover:text-white w-full text-center bg-white">
                                 Tambah Peserta
                             </button>
                             <div class="text-right space-x-3">
@@ -116,6 +116,7 @@ export default {
         return {
             loader: false,
             competitions: [],
+            max_count: 3,
             form: {
                 mode: 'Administrasi',
                 administration: reactive({
@@ -214,7 +215,9 @@ export default {
             this.form.mode = 'Administrasi'
         },
         addParticipant() {
-            if(this.form.participants.length < 3) {
+            if(this.form.administration.category === 'student') this.max_count = 2
+            else this.max_count = 3
+            if(this.form.participants.length < this.max_count) {
                 let participant = reactive({
                     id: null,
                     name: null,

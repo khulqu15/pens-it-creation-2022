@@ -7,10 +7,45 @@
 
             <div class="mt-12 text-gray-500">
                 <span v-if="administration[0] && administration[0].category === 'colleger'">
-                    Web Design Competition adalah perlombaan yang diperuntukan bagi mahasiswa/I aktif program sarjana maupun diploma di perguruan tinggi swasta atau negeri di seluruh Indonesia dengan menguji kreativitasnya dalam mendesain web. Keberadaan lomba ini diharapkan dapat menjadi wadah bagi mahasiswa/I dalam menuangkan ide-ide
+                    <div v-if="administration[0].competitions === 'web'">
+                        Merupakan kompetisi yang dilaksanakan dalam tim terdiri dari 3 orang peserta Mahasiswa aktif di seluruh Indonesia untuk menampilkan kreativitas, ide, inovasi dan memberikan terobosan baru dalam membuat desain web
+                        <div class="alert alert-success shadow-lg flex justify-between mt-4">
+                            <div>
+                                <svg xmlns="http://www.w3.org/2000/svg" class="stroke-current flex-shrink-0 h-6 w-6" fill="none" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+                                <span>Kamu telah mengisi administrasi, Silahkan masuk grup</span>
+                            </div>
+                            <div>
+                                <a target="_blank" class="btn bg-white text-green-700 border-0" href="https://chat.whatsapp.com/JbRfiTwuk3XHZOxhK0H0ZU">Gabung Grup</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div v-else>
+                        Kompetisi dilaksanakan dalam tim yang terdiri dari 3 peserta mahasiswa aktif di seluruh Indonesia untuk mencari calon pengembang ide bisnis dengan memanfaatkan teknologi yang nantinya dapat menjadi inspirasi kepada para developer untuk mengembangkan atau membuat aplikasi yang dapat membantu masyarakat maupun kepemerintahan.
+                         <div class="alert alert-success shadow-lg flex justify-between mt-4">
+                            <div>
+                                <svg xmlns="http://www.w3.org/2000/svg" class="stroke-current flex-shrink-0 h-6 w-6" fill="none" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+                                <span>Kamu telah mengisi administrasi, Silahkan masuk grup</span>
+                            </div>
+                            <div>
+                                <a target="_blank" class="btn bg-white text-green-700 border-0" href="https://chat.whatsapp.com/Du8iJ3i8kVv4ILvRVKlH0t">Gabung Grup</a>
+                            </div>
+                        </div>
+                    </div>
+                </span>
+                <span v-else-if="administration[0] && administration[0].category === 'student'">
+                    Merupakan kompetisi yang dilaksanakan dalam tim terdiri dari 2 orang peserta siswa/siswi SMA/sederajat untuk mengembangkan ide dan kreativitas dalam membuat design aplikasi yang baik tidak hanya secara visual, namun juga pengalaman pengguna menggunakan aplikasi tersebut. Web Design Competition adalah perlombaan yang diperuntukan bagi mahasiswa/I aktif program sarjana maupun diploma di perguruan tinggi swasta atau negeri di seluruh Indonesia dengan menguji kreativitasnya dalam mendesain web. Keberadaan lomba ini diharapkan dapat menjadi wadah bagi mahasiswa/I dalam menuangkan ide-ide
+                    <div class="alert alert-success shadow-lg flex justify-between mt-4">
+                        <div>
+                            <svg xmlns="http://www.w3.org/2000/svg" class="stroke-current flex-shrink-0 h-6 w-6" fill="none" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+                            <span>Kamu telah mengisi administrasi, Silahkan masuk grup</span>
+                        </div>
+                        <div>
+                            <a target="_blank" class="btn bg-white text-green-700 border-0" href="https://chat.whatsapp.com/DS1Xo8EjpVq70xYDVdTzoJ">Gabung Grup</a>
+                        </div>
+                    </div>
                 </span>
                 <span v-else>
-                    Kompetisi User Interface (UI)/User Experience (UX) Design adalah kompetisi desain antarmuka sistem/produk yang berorientasi kepada kenyamanan dan kemudahan pengguna (user) dalam menggunakan sistem/produk tersebut.
+                    IT Creation merupakan suatu perlombaan dalam lingkup teknologi dan bisnis yang diselenggarakan untuk mahasiswa dan pelajar. Terdapat 3 bidang lomba yaitu Bisnis TIK, Web Design, dan UI/UX design.
                 </span>
             </div>
         </div>

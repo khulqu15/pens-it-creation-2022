@@ -157,8 +157,9 @@
                     </div>
                     <div class="form-control w-full" v-if="administrations.data[selected].elimination">
                         <input readonly disabled maxlength="255" id="elimination-input" v-model="administrations.data[selected].elimination.link" required type="text" placeholder="eg. www.domain.com" class="input w-full shadow rounde-xl"/>
-                        <div class="grid grid-cols-2 gap-3">
+                        <div class="grid grid-cols-3 gap-3">
                             <label for="elimination_modal" class="btn btn-ghost mt-4 w-full">Tutup</label>
+                            <a target="_blank" :href="administrations.data[selected].elimination.link" class="btn btn-info mt-4 btn-outline">Buka Link</a>
                             <button @click="confirmElemination()" class="btn mt-4 w-full" :class="{'btn-error': administrations.data[selected].elimination.is_eliminated, 'btn-info': administrations.data[selected].elimination.is_eliminated === 0}">
                                 {{ administrations.data[selected].elimination.is_eliminated ? 'Tidak jadi' : 'Konfirmasi' }}
                             </button>
