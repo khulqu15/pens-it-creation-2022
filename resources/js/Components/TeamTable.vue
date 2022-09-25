@@ -49,17 +49,17 @@
                     <td>{{ item.competitions === 'uiux' ? 'UiUx Competition' : item.competition === 'web' ? 'Web Competition' : 'Idea Bussiness' }}</td>
                     <td>{{ item.participant.length }} Anggota</td>
                     <td>
-                        <span class="badge" :class="{'badge-success': item.is_confirmed === 1, 'badge-error': item.is_confirmed === 0}">
-                            {{ item.is_confirmed === 1 ? 'Confirmed' : 'Uniconfirmed' }}
+                        <span class="badge" :class="{'badge-success': item.is_confirmed === '1', 'badge-error': item.is_confirmed === '0'}">
+                            {{ item.is_confirmed === '1' ? 'Confirmed' : 'Uniconfirmed' }}
                         </span>
                     </td>
                     <td>
-                        <span v-if="item.elimination !== null" class="badge" :class="{'badge-success': item.elimination.is_eliminated === 1, 'badge-error': item.elimination.is_eliminated === 0}">
-                            {{ item.elimination.is_eliminated === 1 ? 'Passed' : 'Un-pass' }}
+                        <span v-if="item.elimination !== null" class="badge" :class="{'badge-success': item.elimination.is_eliminated === '1', 'badge-error': item.elimination.is_eliminated === '0'}">
+                            {{ item.elimination.is_eliminated === '1' ? 'Passed' : 'Un-pass' }}
                         </span>
                     </td>
                     <td>
-                        <span class="badge" :class="{'badge-success': item.payment_confirmation === 1, 'badge-error': item.payment_confirmation === 0}">
+                        <span class="badge" :class="{'badge-success': item.payment_confirmation === '1', 'badge-error': item.payment_confirmation === '0'}">
                             {{ item.payment === null ? 'Unpaid' : 'Paid' }}
                         </span>
                     </td>
@@ -135,8 +135,8 @@
                     </div>
                     <div class="modal-action">
                         <label for="confirmation_modal" class="btn btn-ghost">Batal</label>
-                        <button @click="confirmAdministration()" class="btn" :class="{'btn-error': administrations.data[selected].is_confirmed, 'btn-info': administrations.data[selected].is_confirmed === 0}">
-                            {{ administrations.data[selected].is_confirmed ? 'Tidak jadi' : 'Konfirmasi' }}
+                        <button @click="confirmAdministration()" class="btn" :class="{'btn-error': administrations.data[selected].is_confirmed === '1', 'btn-info': administrations.data[selected].is_confirmed === '0'}">
+                            {{ administrations.data[selected].is_confirmed === '1' ? 'Tidak jadi' : 'Konfirmasi' }}
                         </button>
                     </div>
                 </label>
@@ -160,8 +160,8 @@
                         <div class="grid grid-cols-3 gap-3">
                             <label for="elimination_modal" class="btn btn-ghost mt-4 w-full">Tutup</label>
                             <a target="_blank" :href="administrations.data[selected].elimination.link" class="btn btn-info mt-4 btn-outline">Buka Link</a>
-                            <button @click="confirmElemination()" class="btn mt-4 w-full" :class="{'btn-error': administrations.data[selected].elimination.is_eliminated, 'btn-info': administrations.data[selected].elimination.is_eliminated === 0}">
-                                {{ administrations.data[selected].elimination.is_eliminated ? 'Tidak jadi' : 'Konfirmasi' }}
+                            <button @click="confirmElemination()" class="btn mt-4 w-full" :class="{'btn-error': administrations.data[selected].elimination.is_eliminated === '1', 'btn-info': administrations.data[selected].elimination.is_eliminated === '0'}">
+                                {{ administrations.data[selected].elimination.is_eliminated === '1' ? 'Tidak jadi' : 'Konfirmasi' }}
                             </button>
                         </div>
                     </div>
@@ -180,8 +180,8 @@
                         </div>
                         <div class="grid grid-cols-2 gap-3">
                             <label for="payment-modal" class="btn btn-ghost mt-4 w-full">Tutup</label>
-                            <button @click="confirmPayment()" class="btn mt-4 w-full" :class="{'btn-error': administrations.data[selected].payment_confirmation, 'btn-info': administrations.data[selected].payment_confirmation === 0}">
-                                {{ administrations.data[selected].payment_confirmation ? 'Tidak jadi' : 'Konfirmasi' }}
+                            <button @click="confirmPayment()" class="btn mt-4 w-full" :class="{'btn-error': administrations.data[selected].payment_confirmation === '1', 'btn-info': administrations.data[selected].payment_confirmation === '0'}">
+                                {{ administrations.data[selected].payment_confirmation === '1' ? 'Tidak jadi' : 'Konfirmasi' }}
                             </button>
                         </div>
                     </div>
@@ -274,7 +274,7 @@ export default {
             }
         },
         confirmAdministration() {
-            let value = this.administrations.data[this.selected].is_confirmed ? 0 : 1
+            let value = this.administrations.data[this.selected].is_confirmed === '1' ? 0 : 1
             this.$inertia.post(this.route('administration.confirm', this.administrations.data[this.selected].id), {
                 is_confirmed: value,
             }, {
@@ -286,7 +286,7 @@ export default {
             })
         },
         confirmElemination() {
-            let value = this.administrations.data[this.selected].elimination.is_eliminated ? 0 : 1
+            let value = this.administrations.data[this.selected].elimination.is_eliminated === '1' ? 0 : 1
             this.$inertia.post(this.route('elimination.confirm', this.administrations.data[this.selected].elimination.id), {
                 is_eliminated: value,
             }, {
@@ -298,7 +298,7 @@ export default {
             })
         },
         confirmPayment() {
-            let value = this.administrations.data[this.selected].payment_confirmation ? 0 : 1
+            let value = this.administrations.data[this.selected].payment_confirmation === '1' ? 0 : 1
             this.$inertia.post(this.route('administration.payment.confirmation', this.administrations.data[this.selected].id), {
                 payment_confirmation: value,
             }, {

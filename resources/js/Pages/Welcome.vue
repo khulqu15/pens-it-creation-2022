@@ -1,30 +1,25 @@
 <template>
     <div>
-        <div class="grid grid-flow-col gap-5 text-center auto-cols-max">
-            <div class="flex flex-col p-2 bg-neutral rounded-box text-neutral-content">
-                <span class="countdown font-mono text-5xl">
-                  <span style="--value:15;"></span>
-                </span>
-                days
+        <div id="header" class="relative">
+            <img src="/img/bg-hero.png" class="w-full h-auto absolute top-0 left-0">
+            <LayoutHeader/>
+            <div class="flex justify-center pt-24">
+                <div class="relative">
+                    <h1 class="my-font text-8xl relative z-10 text-cyan-600">HIMIT FEST 2022</h1>
+                    <h1 class="my-font text-8xl absolute -bottom-2 text-yellow-600">HIMIT FEST 2022</h1>
                 </div>
-                <div class="flex flex-col p-2 bg-neutral rounded-box text-neutral-content">
-                <span class="countdown font-mono text-5xl">
-                  <span style="--value:10;"></span>
-                </span>
-                hours
-                </div>
-                <div class="flex flex-col p-2 bg-neutral rounded-box text-neutral-content">
-                <span class="countdown font-mono text-5xl">
-                  <span style="--value:24;"></span>
-                </span>
-                min
-                </div>
-                <div class="flex flex-col p-2 bg-neutral rounded-box text-neutral-content">
-                <span class="countdown font-mono text-5xl">
-                  <span style="--value:55;"></span>
-                </span>
-                sec
             </div>
         </div>
     </div>
 </template>
+
+<script>
+import { Link } from '@inertiajs/inertia-vue3'
+import LayoutHeader from '@/Components/LayoutHeader.vue'
+export default {
+    components: {
+        LayoutHeader,
+        Link,
+    }
+}
+</script>
