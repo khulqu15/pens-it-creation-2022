@@ -58,8 +58,8 @@
                             <Icon icon="akar-icons:folder-add" class="text-3xl"/>
                             <div class="ml-4 text-lg text-gray-600 leading-7 font-semibold">
                                 <a href="#">Administrasi
-                                    <div v-if="administration[0] !== null" class="badge gap-2" :class="{'badge-error': administration[0].is_confirmed === 0, 'badge-success': administration[0].is_confirmed}">
-                                        {{ administration[0] && administration[0].is_confirmed === 0 ? 'Menunggu Konfirmasi' : 'Sudah Dikonfirmasi' }}
+                                    <div v-if="administration[0] !== null" class="badge gap-2" :class="{'badge-error': administration[0].is_confirmed === '0', 'badge-success': administration[0].is_confirmed === '1'}">
+                                        {{ administration[0].is_confirmed === "0" ? 'Menunggu Konfirmasi' : 'Sudah Dikonfirmasi' }}
                                     </div>
                                     <div v-else class="badge gap-2 badge-ghost">
                                         Belum diisi
@@ -71,8 +71,8 @@
                     </div>
                     <div>
                         <a v-if="administration[0] === null" :href="route('administration.create')" class="btn bg-yellow-500 border-0 hover:bg-yellow-700 text-black pt-1 px-6 mt-3">Lengkapi</a>
-                        <a v-else :href="administration[0].is_confirmed === 1 ? '#' : route('administration.edit', administration[1])" class="btn bg-green-500 border-0 hover:bg-green-700 text-black pt-1 px-6 mt-3"
-                            :class="{'btn-disabled opacity-50': administration[0].is_confirmed === 1}">
+                        <a v-else :href="administration[0].is_confirmed === '1' ? '#' : route('administration.edit', administration[1])" class="btn bg-green-500 border-0 hover:bg-green-700 text-black pt-1 px-6 mt-3"
+                           :class="{'btn-disabled opacity-50': administration[0].is_confirmed === '1'}">
                             {{ administration[0].participant.length < 2 ? 'Lengkapi' : 'Edit' }}
                         </a>
                     </div>
@@ -86,8 +86,8 @@
                             <Icon icon="akar-icons:double-sword" class="text-3xl"/>
                             <div class="ml-4 text-lg text-gray-600 leading-7 space-x-1 font-semibold">
                                 <a href="#">Penyisihan
-                                    <div v-if="administration[0] && administration[0].elimination !== null" class="badge gap-2" :class="{'badge-error': administration[0].elimination.is_eliminated === 0, 'badge-success': administration[0].elimination.is_eliminated === 1}">
-                                        {{ administration[0].elimination.is_eliminated === 0 ? 'Belum Tereliminasi' : 'Lolos Penyisihan' }}
+                                    <div v-if="administration[0] && administration[0].elimination !== null" class="badge gap-2" :class="{'badge-error': administration[0].elimination.is_eliminated === '0', 'badge-success': administration[0].elimination.is_eliminated === '1'}">
+                                        {{ administration[0].elimination.is_eliminated === '0' ? 'Belum Tereliminasi' : 'Lolos Penyisihan' }}
                                     </div>
                                     <div v-else class="badge gap-2 badge-ghost">
                                         Belum diisi
@@ -97,10 +97,10 @@
                         </div>
                         <p class="mt-3 ml-12">Babak penyisihan untuk menentukan kamu masuk babak final</p>
                     </div>
-                    <div v-if="administration[0] && administration[0].is_confirmed">
-                        <label :for="administration[0].elimination === null || administration[0].elimination.is_eliminated !== 1 ? 'elimination-modal' : ''" id="elimination-modal-label" v-if="administration[0]"
-                            class="btn border-0 text-black pt-1 px-6 mt-3"
-                            :class="{'bg-yellow-500 hover:bg-yellow-700': administration[0].elimination === null, 'bg-green-500 hover:bg-green-700': administration[0].elimination !== null, 'btn-disabled opacity-50': administration[0].elimination && administration[0].elimination.is_eliminated === 1}">
+                    <div v-if="administration[0] && administration[0].is_confirmed === '1'">
+                        <label :for="administration[0].elimination === null || administration[0].elimination.is_eliminated !== '1' ? 'elimination-modal' : ''" id="elimination-modal-label" v-if="administration[0] !== null"
+                               class="btn border-0 text-black pt-1 px-6 mt-3"
+                               :class="{'bg-yellow-500 hover:bg-yellow-700': administration[0].elimination === null, 'bg-green-500 hover:bg-green-700': administration[0].elimination !== null, 'btn-disabled opacity-50': administration[0].elimination != null && administration[0].elimination.is_eliminated === '1'}">
                             {{ administration[0].elimination === null ? 'Lengkapi' : 'Edit' }}
                         </label>
                         <input type="checkbox" id="elimination-modal" class="modal-toggle" />
@@ -139,8 +139,8 @@
                             <Icon icon="akar-icons:money" class="text-3xl"/>
                             <div class="ml-4 text-lg text-gray-600 leading-7 font-semibold">
                                 <a href="#">Pembayaran
-                                    <div v-if="administration[0] !== null && administration[0].payment !== null" class="badge gap-2" :class="{'badge-error': administration[0].payment_confirmation === 0, 'badge-success': administration[0].payment_confirmation}">
-                                        {{ administration[0].payment_confirmation === 0 ? 'Menunggu Konfirmasi' : 'Sudah Dikonfirmasi' }}
+                                    <div v-if="administration[0] !== null && administration[0].payment !== null" class="badge gap-2" :class="{'badge-error': administration[0].payment_confirmation === '0', 'badge-success': administration[0].payment_confirmation === '1'}">
+                                        {{ administration[0].payment_confirmation === "0" ? 'Menunggu Konfirmasi' : 'Sudah Dikonfirmasi' }}
                                     </div>
                                     <div v-else class="badge gap-2 badge-ghost">
                                         Belum diisi
@@ -151,8 +151,8 @@
                         <p class="mt-3 ml-12">Lakukan pembayaran sesuai jenis lomba dan upload bukti pembayaran pada akunmu</p>
                     </div>
                     <div v-if="administration[0] && administration[0].elimination !== null">
-                        <label v-if="administration[0].elimination.is_eliminated === 1" id="payment-modal-label" :for="administration[0].payment_confirmation === 0 ? 'payment-modal' : ''" class="btn bg-yellow-500 border-0 hover:bg-yellow-700 text-black pt-1 px-6 mt-3"
-                            :class="{'bg-yellow-500 hover:bg-yellow-700': administration[0].payment === null, 'bg-green-500 hover:bg-green-700': administration[0].payment, 'btn-disabled opacity-50': administration[0] && administration[0].payment_confirmation === 1}">
+                        <label v-if="administration[0].elimination.is_eliminated === '1'" id="payment-modal-label" :for="administration[0].payment_confirmation === '0' ? 'payment-modal' : ''" class="btn bg-yellow-500 border-0 hover:bg-yellow-700 text-black pt-1 px-6 mt-3"
+                               :class="{'bg-yellow-500 hover:bg-yellow-700': administration[0].payment === null, 'bg-green-500 hover:bg-green-700': administration[0].payment, 'btn-disabled opacity-50': administration[0] && administration[0].payment_confirmation === '1'}">
                             {{ administration[0].payment === null ? 'Lengkapi' : 'Edit' }}
                         </label>
                         <input type="checkbox" id="payment-modal" class="modal-toggle" />
@@ -222,7 +222,7 @@ export default {
                 this.form.elimination.link = this.administration[0].elimination.link
             if(this.administration[0].payment)
                 this.form.payment.preview = '/img/payment/'+this.administration[0].payment
-                this.form.payment.payment = this.administration[0].payment
+            this.form.payment.payment = this.administration[0].payment
         }
     },
     methods: {
